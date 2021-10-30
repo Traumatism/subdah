@@ -12,8 +12,8 @@ class Logger:
     def display_dict(cls, dictionnary: dict):
         """ Display a dictionnary as fancy as possible. """
         cls.console.print("".join(
-            "[green]*[/green] %s[cyan]%s[/cyan]: %s\n"
-            % (key, "." * (max(len(k) for k in dictionnary) - len(key) + 2), value)
+            "[green]*[/green] %s%s: %s\n"
+            % (key, " " * (max(len(k) for k in dictionnary) - len(key) + 2), value)
             for key, value in dictionnary.items()
         )[:-1])
 

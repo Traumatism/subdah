@@ -2,6 +2,7 @@ import sys
 
 from rich.status import Status
 
+from lib.common.abc import Module
 from lib.arguments import arguments
 from lib.logger import Logger
 
@@ -12,10 +13,23 @@ from modules.alienvault import AlienVault
 from modules.fullhunt import FullHunt
 from modules.crtsh import CRTSh
 from modules.threatminer import ThreatMiner
+from modules.shodan import Shodan
+from modules.threatcrowd import ThreatCrowd 
 
-modules = (Hackertarget, CRTSh, AlienVault, FullHunt, ThreatMiner)
+
+modules = (
+    Hackertarget, CRTSh, AlienVault, FullHunt, 
+    ThreatMiner, Shodan, ThreatCrowd,
+)
+
 
 if __name__ == '__main__':
+    [
+        Logger.warning("<%s> is not a subclass of <lib.common.abc.Module> !" % module.__name__)
+        for module in modules
+        if not issubclass(module, Module)
+    ]
+
     Logger.console.print(r"""[bold yellow]
               _     _     _   
       ___ _ _| |_ _| |___| |_ 
@@ -62,14 +76,11 @@ if __name__ == '__main__':
         for address in [x.address for x in subdomain.resolve()]:
             database.update_subdomain(subdomain, address)
 
-    results = {}
-
-    for subdomain in database.get_subdomains():
-        if subdomain.resolvable is False:
-            results[str(subdomain)] = "[red]n/a[/red]"
-            continue
-
-        results[str(subdomain)] = ", ".join(subdomain.resolutions)
+    results = {
+        str(subdomain): ", ".join(subdomain.resolutions)
+        if subdomain.resolvable is True else "[red]n/a[/red]"
+        for subdomain in database.get_subdomains()
+    }
 
     Logger.display_dict(results)
 
