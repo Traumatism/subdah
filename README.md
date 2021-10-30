@@ -1,6 +1,7 @@
 # Subdah
 ## another subdomains scanner...
 
+![](preview.png)
 
 ### Installation
 

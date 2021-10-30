@@ -15,7 +15,7 @@ class Logger:
             "[green]*[/green] %s[cyan]%s[/cyan]: %s\n"
             % (key, "." * (max(len(k) for k in dictionnary) - len(key) + 2), value)
             for key, value in dictionnary.items()
-        ))
+        )[:-1])
 
 
     @classmethod
