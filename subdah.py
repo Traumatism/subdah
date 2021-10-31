@@ -24,6 +24,7 @@ modules = (
 
 
 if __name__ == '__main__':
+
     [
         Logger.warning("<%s> is not a subclass of <lib.common.abc.Module> !" % module.__name__)
         for module in modules

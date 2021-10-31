@@ -13,11 +13,14 @@ class FullHunt(Module):
 
 
     def run(self):
-        response = requests.get("https://fullhunt.io/search?query=%s" % self.target)
+        response = requests.get("https://fullhunt.io/api/v1/domain/%s/subdomains" % self.target)
 
-        subdomains = set(re.findall(r'\/host\/([a-zA-Z0-9.-]+\.%s)\"' % self.target, response.text))
+        if response.status_code != 200:
+            return
 
-        for subdomain in subdomains:
+        json_data = response.json()
+
+        for subdomain in json_data["hosts"]:
             subdomain =  Subdomain(subdomain)
 
             database.add_subdomain(subdomain)
