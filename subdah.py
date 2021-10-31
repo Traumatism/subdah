@@ -54,16 +54,12 @@ if __name__ == '__main__':
     ) as status:
 
         for i, module in enumerate(module(target_domain) for module in modules):
-
             status.update(f"Running modules... ({i}/{len(modules)}, found {database.count})", spinner="moon")
-
             Logger.debug(f"Running module: {module.__class__.__name__}")
-
             try:
                 module.run()
             except Exception as exc:
                 Logger.warning(f"Error running module: {module.__class__.__name__}: {exc}")
-
 
     results = database.get_subdomains()
 

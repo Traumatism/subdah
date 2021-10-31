@@ -25,12 +25,6 @@ class Subdomain(ABC):
             return False
 
 
-    @property
-    def domain(self) -> str:
-        """ Return the domain of the subdomain. """
-        return '.'.join(self.__subdomain.split('.')[-2:])
-
-
     def resolve(self) -> None | list:
         """ Resolve the subdomain. """
         return None if self.resolvable is False else [x.address for x in dns.resolver.query(self.__subdomain, 'A')]
