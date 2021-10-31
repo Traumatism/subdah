@@ -31,9 +31,9 @@ class Subdomain(ABC):
         return '.'.join(self.__subdomain.split('.')[-2:])
 
 
-    def resolve(self) -> list | None:
+    def resolve(self) -> None | list:
         """ Resolve the subdomain. """
-        return None if self.resolvable is False else list(dns.resolver.query(self.__subdomain, 'A'))
+        return None if self.resolvable is False else [x.address for x in dns.resolver.query(self.__subdomain, 'A')]
 
 
     def __str__(self) -> str:
@@ -47,7 +47,7 @@ class Module(ABC):
     @abstractmethod
     def __init__(self, target: str):
         """ Initialize the module. """
-        pass
+        self.target = target
 
 
     @abstractmethod
