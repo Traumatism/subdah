@@ -8,7 +8,7 @@ class Database:
     """ Database class. """
 
     def __init__(self) -> None:
-        self.__subdomains = {}
+        self.__subdomains: dict[str, Subdomain] = {}
 
 
     @property
@@ -17,9 +17,9 @@ class Database:
         return len(self.__subdomains)
 
 
-    def get_subdomains(self):
+    def get_subdomains(self) -> list[Subdomain]:
         """ Get all subdomains in the database. """
-        return self.__subdomains.values()
+        return list(self.__subdomains.values())
 
 
     def add_subdomain(self, subdomain: Subdomain):
@@ -35,7 +35,6 @@ class Database:
 
     def update_subdomain(self, subdomain: Subdomain, ip_address: Any):
         """ Update a subdomain in the database. """
-
         if str(subdomain) not in map(str, self.__subdomains):
             self.add_subdomain(subdomain)
 

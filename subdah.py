@@ -14,12 +14,16 @@ from modules.fullhunt import FullHunt
 from modules.crtsh import CRTSh
 from modules.threatminer import ThreatMiner
 from modules.shodan import Shodan
-from modules.threatcrowd import ThreatCrowd 
+from modules.threatcrowd import ThreatCrowd
+from modules.yahoo import Yahoo
+from modules.anubis import Anubis
+from modules.securitytrails import SecurityTrails
 
 
 modules = (
     Hackertarget, CRTSh, AlienVault, FullHunt, 
-    ThreatMiner, Shodan, ThreatCrowd,
+    ThreatMiner, Shodan, ThreatCrowd, Yahoo,
+    Anubis, SecurityTrails
 )
 
 
@@ -75,13 +79,18 @@ if __name__ == '__main__':
         for subdomain in results:
             if subdomain.resolvable is False:
                 continue
+            
+            resolutions = subdomain.resolve()
+            
+            if resolutions is None:
+                continue
 
-            for address in [x.address for x in subdomain.resolve()]:
+            for address in resolutions:
                 database.update_subdomain(subdomain, address)
 
         results = {
             str(subdomain): ", ".join(subdomain.resolutions)
-            if subdomain.resolvable is True else "[red]n/a[/red]"
+            if subdomain.resolutions is not None and subdomain.resolvable is True else "[red]n/a[/red]"
             for subdomain in database.get_subdomains()
         }
 
