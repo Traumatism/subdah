@@ -68,21 +68,25 @@ if __name__ == '__main__':
 
     Logger.success(f"Found {len(results)} results!")
 
-    Logger.info("Resolving subdomains...")
+    if arguments.dont_resolve is False:
+        Logger.info("Resolving subdomains...")
 
-    for subdomain in results:
-        if subdomain.resolvable is False:
-            continue
+        for subdomain in results:
+            if subdomain.resolvable is False:
+                continue
 
-        for address in [x.address for x in subdomain.resolve()]:
-            database.update_subdomain(subdomain, address)
+            for address in [x.address for x in subdomain.resolve()]:
+                database.update_subdomain(subdomain, address)
 
-    results = {
-        str(subdomain): ", ".join(subdomain.resolutions)
-        if subdomain.resolvable is True else "[red]n/a[/red]"
-        for subdomain in database.get_subdomains()
-    }
+        results = {
+            str(subdomain): ", ".join(subdomain.resolutions)
+            if subdomain.resolvable is True else "[red]n/a[/red]"
+            for subdomain in database.get_subdomains()
+        }
 
-    Logger.display_dict(results)
+        Logger.display_dict(results)
+    else:
+        for subdomain in results:
+            Logger.console.print(f"[green]*[/green] [white]{subdomain}[/white]")
 
     Logger.success("Finished")

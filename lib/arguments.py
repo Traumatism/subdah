@@ -15,6 +15,13 @@ __parser.add_argument(
     metavar="<domain>"
 )
 
+__parser.add_argument(
+    "-n", "--disable-resolutions",
+    help="Don't resolve found subdomains.",
+    action="store_true",
+    dest="dont_resolve",
+    default=False
+)
 
 __parser.add_argument(
     "--debug",
