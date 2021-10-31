@@ -9,9 +9,6 @@ from lib import database
 class CRTSh(Module):
     """ Search subdomains on crt.sh. """
 
-    def __init__(self, target: str):
-        self.target = target
-
 
     def add_subdomain(self, subdomain: Subdomain):
         """ Add a subdomain to the database. """

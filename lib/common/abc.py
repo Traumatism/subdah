@@ -38,7 +38,6 @@ class Subdomain(ABC):
 class Module(ABC):
     """ Abstract base class for all modules. """
 
-    @abstractmethod
     def __init__(self, target: str):
         """ Initialize the module. """
         self.target = target

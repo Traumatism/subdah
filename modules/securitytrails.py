@@ -10,9 +10,6 @@ from lib import database
 class SecurityTrails(Module):
     """ Search subdomains on SecurityTrails. """
 
-    def __init__(self, target: str):
-        super().__init__(target)
-        
         
     def run(self):
         response = requests.get(
@@ -23,7 +20,4 @@ class SecurityTrails(Module):
         subdomains = set(re.findall(r'\"([a-zA-Z0-9.-]+\.%s)\"' % self.target, response.text))
 
         for subdomain in subdomains:
-
-            subdomain =  Subdomain(subdomain)
-
-            database.add_subdomain(subdomain)
+            database.add_subdomain(Subdomain(subdomain))

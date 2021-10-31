@@ -1,5 +1,4 @@
 import requests
-import re
 
 from lib.common.abc import Module, Subdomain
 
@@ -8,9 +7,6 @@ from lib import database
 
 class AlienVault(Module):
     """ Search subdomains on AlienVault. """
-
-    def __init__(self, target: str):
-        self.target = target
 
 
     def add_subdomain(self, subdomain: Subdomain):
@@ -40,6 +36,4 @@ class AlienVault(Module):
         json_data = response.json()
 
         for report in json_data["passive_dns"]:
-            subdomain =  Subdomain(report["hostname"])
-
-            self.add_subdomain(subdomain)
+            self.add_subdomain(Subdomain(report["hostname"]))

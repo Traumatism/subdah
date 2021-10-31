@@ -9,9 +9,6 @@ from lib import database
 class Shodan(Module):
     """ Search subdomains on Shodan. """
 
-    def __init__(self, target: str):
-        self.target = target
-
 
     def run(self):
         response = requests.get("https://shodan.io/domain/%s" % self.target)
@@ -22,8 +19,4 @@ class Shodan(Module):
             if subdomain in ("*", "SPF"):
                 continue
 
-            subdomain = f"{subdomain}.{self.target}"
-
-            subdomain =  Subdomain(subdomain)
-
-            database.add_subdomain(subdomain)
+            database.add_subdomain(Subdomain(f"{subdomain}.{self.target}"))
