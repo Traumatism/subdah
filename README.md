@@ -1,5 +1,5 @@
-# Subdah
-## another subdomains scanner...
+# Subdah 🔎
+## another subdomains scanner.
 
 ![](preview.png)
 
