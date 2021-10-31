@@ -11,6 +11,12 @@ class Database:
         self.__subdomains = {}
 
 
+    @property
+    def count(self) -> int:
+        """ Return the number of subdomains in the database. """
+        return len(self.__subdomains)
+
+
     def get_subdomains(self):
         """ Get all subdomains in the database. """
         return self.__subdomains.values()
