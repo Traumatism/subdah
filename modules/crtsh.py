@@ -7,6 +7,7 @@ from lib import database
 
 
 class CRTSh(Module):
+    """ Search subdomains on crt.sh. """
 
     def __init__(self, target: str):
         self.target = target

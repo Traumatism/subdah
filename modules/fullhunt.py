@@ -7,6 +7,7 @@ from lib import database
 
 
 class FullHunt(Module):
+    """ Search subdomains on FullHunt. """
 
     def __init__(self, target: str):
         self.target = target

@@ -7,6 +7,7 @@ from lib import database
 
 
 class Hackertarget(Module):
+    """ Search subdomains Hackertarget. """
 
     def __init__(self, target: str):
         self.target = target

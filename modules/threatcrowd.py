@@ -6,6 +6,7 @@ from lib import database
 
 
 class ThreatCrowd(Module):
+    """ Search subdomains on ThreatCrowd. """
 
     def __init__(self, target: str):
         self.target = target

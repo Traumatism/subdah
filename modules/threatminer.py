@@ -6,6 +6,7 @@ from lib import database
 
 
 class ThreatMiner(Module):
+    """ Search subdomains on ThreatMiner. """
 
     def __init__(self, target: str):
         self.target = target

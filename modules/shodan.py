@@ -7,6 +7,7 @@ from lib import database
 
 
 class Shodan(Module):
+    """ Search subdomains on Shodan. """
 
     def __init__(self, target: str):
         self.target = target
