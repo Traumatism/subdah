@@ -1,12 +1,18 @@
 import argparse
 
 
-__parser = argparse.ArgumentParser(
+parser = argparse.ArgumentParser(
     usage="%(prog)s <arguments>",
     description="Subdah - a cool subdomains scanner."
 )
 
-__parser.add_argument(
+global_flags = parser.add_argument_group("Global flags")
+
+output_flags = parser.add_argument_group("Output flags")
+
+misc_flags = parser.add_argument_group("Miscellanious flags")
+
+global_flags.add_argument(
     "-d", "--domain",
     help="Domain to scan.",
     required=True,
@@ -15,7 +21,7 @@ __parser.add_argument(
     metavar="<domain>"
 )
 
-__parser.add_argument(
+global_flags.add_argument(
     "-n", "--disable-resolutions",
     help="Don't resolve found subdomains.",
     action="store_true",
@@ -23,7 +29,15 @@ __parser.add_argument(
     default=False
 )
 
-__parser.add_argument(
+output_flags.add_argument(
+    "-o", "--output",
+    help="Output file.",
+    required=False,
+    dest="output_file",
+    default=False
+)
+
+misc_flags.add_argument(
     "--debug",
     help="Debug mode.",
     action="store_true",
@@ -31,4 +45,4 @@ __parser.add_argument(
     default=False
 )
 
-arguments = __parser.parse_args()
+arguments = parser.parse_args()

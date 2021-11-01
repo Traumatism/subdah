@@ -2,6 +2,17 @@ import dns.resolver
 
 from abc import ABC, abstractmethod
 
+""" List of common ports """
+PORTS = (
+    21,    # FTP
+    22,    # SSH
+    80,    # HTTP
+    443,   # HTTPS
+    3306,  # MySQL
+    3389,  # RDP
+    25565, # Minecraft
+    27017, # MongoDB
+)
 
 class Subdomain(ABC):
     """ Abstract base class for all subdomains. """
@@ -11,6 +22,8 @@ class Subdomain(ABC):
         self.__subdomain = subdomain
 
         self.resolutions = []
+        
+        self.open_ports = []
 
         super().__init__()
 
@@ -23,6 +36,12 @@ class Subdomain(ABC):
             return True
         except:
             return False
+
+
+    def scan_ports(self, ports=[22, 80, 443, 3306, 3389, 27017]):
+        """ Scan the subdomain for open ports. """
+        if self.resolvable is False:
+            return
 
 
     def resolve(self) -> None | list:

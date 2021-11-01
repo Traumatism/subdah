@@ -1,4 +1,6 @@
 import sys
+import time
+import json
 
 from rich.status import Status
 
@@ -27,7 +29,7 @@ modules = (
 )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     [
         Logger.warning("<%s> is not a subclass of <lib.common.abc.Module> !" % module.__name__)
@@ -36,18 +38,22 @@ if __name__ == '__main__':
     ]
 
     Logger.console.print(r"""[bold yellow]
-              _     _     _   
-      ___ _ _| |_ _| |___| |_ 
-     |_ -| | | . | . | .'|   |
-     |___|___|___|___|__,|_|_| [cyan](v%s)[/cyan][bold yellow]
+             _     _     _   
+     ___ _ _| |_ _| |___| |_ 
+    |_ -| | | . | . | .'|   |
+    |___|___|___|___|__,|_|_| [white]([cyan]v%s[/cyan])[/white][/bold yellow]
 
- [white]github.com/traumatism [green]|[/green] @toastakerman[/white]
+    [cyan]the third eye for subdomains 👁[/cyan]
+     
+    [green]github.com/traumatism[/green]
 
     """ % __version__)
 
     target_domain = arguments.domain.lower()
 
     Logger.info("Starting...")
+    
+    start_time = time.time()
 
     with Status(
         f"Running modules... (0/{len(modules)}, found {database.count})", console=Logger.console, spinner="moon"
@@ -70,6 +76,7 @@ if __name__ == '__main__':
     Logger.success(f"Found {len(results)} results!")
 
     if arguments.dont_resolve is False:
+
         Logger.info("Resolving subdomains...")
 
         for subdomain in results:
@@ -91,8 +98,28 @@ if __name__ == '__main__':
         }
 
         Logger.display_dict(results)
+
     else:
         for subdomain in results:
             Logger.console.print(f"[green]*[/green] [white]{subdomain}[/white]")
 
-    Logger.success("Finished")
+
+    if arguments.output_file is not False:
+        json_data = [{"0": "File generated using Subdah", "1": "github.com/traumatism", "2": "twitter.com/toastakerman"}]
+        
+        for subdomain in database.get_subdomains():
+
+            report = {
+                "hostname": str(subdomain),
+                "resolvable": subdomain.resolvable,
+                "resolutions": subdomain.resolutions                
+            }
+
+            json_data.append(report)
+
+        with open(arguments.output_file, "w") as f:
+            f.write(json.dumps(json_data, indent=4))
+
+    end_time = time.time()
+
+    Logger.success(f"Finished in {round(end_time - start_time, 2)} seconds.")
