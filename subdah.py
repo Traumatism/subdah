@@ -20,12 +20,14 @@ from modules.threatcrowd import ThreatCrowd
 from modules.yahoo import Yahoo
 from modules.anubis import Anubis
 from modules.securitytrails import SecurityTrails
+from modules.twitter import Twitter
+from modules.google import Google
 
 
 modules = (
     Hackertarget, CRTSh, AlienVault, FullHunt, 
     ThreatMiner, Shodan, ThreatCrowd, Yahoo,
-    Anubis, SecurityTrails
+    Anubis, SecurityTrails, Twitter, Google
 )
 
 
