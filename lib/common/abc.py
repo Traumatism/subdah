@@ -19,7 +19,7 @@ class Subdomain(ABC):
 
     def __init__(self, subdomain: str) -> None:
 
-        self.__subdomain = subdomain
+        self.__subdomain = subdomain.lower()
 
         self.resolutions = []
         
