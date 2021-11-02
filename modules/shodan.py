@@ -3,6 +3,8 @@ import re
 
 from lib.common.abc import Module, Subdomain
 
+from lib.config import SUBDOMAIN_REGEX
+
 from lib import database
 
 
@@ -13,7 +15,7 @@ class Shodan(Module):
     def run(self):
         response = requests.get("https://shodan.io/domain/%s" % self.target)
 
-        subdomains = set(re.findall(r'<li>([a-zA-Z0-9.-]+)<\/li>\n', response.text))
+        subdomains = set(re.findall(r'<li>(%s)<\/li>\n' % SUBDOMAIN_REGEX, response.text))
 
         for subdomain in subdomains:
             if subdomain in ("*", "SPF"):
