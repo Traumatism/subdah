@@ -13,12 +13,12 @@ output_flags = parser.add_argument_group("Output flags")
 misc_flags = parser.add_argument_group("Miscellanious flags")
 
 global_flags.add_argument(
-    "-d", "--domain",
+    "-d",
     help="Domain to scan.",
     required=True,
     type=str,
     dest="domain",
-    metavar="<domain>"
+    metavar="<domain #1,domain #2…>"
 )
 
 global_flags.add_argument(
@@ -34,7 +34,8 @@ output_flags.add_argument(
     help="Output file.",
     required=False,
     dest="output_file",
-    default=False
+    default=False,
+    metavar="<file path>"
 )
 
 misc_flags.add_argument(

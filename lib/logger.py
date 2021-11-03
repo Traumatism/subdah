@@ -3,7 +3,7 @@ from rich.console import Console
 from .arguments import arguments
 
 class Logger:
-    """ Logger library. """
+    """ Logger class. """
 
     console = Console(log_time_format="<%X>")
 

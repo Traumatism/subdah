@@ -52,22 +52,29 @@ if __name__ == "__main__":
     """ % __version__)
 
     target_domain = arguments.domain.lower()
+    
+    if "," in target_domain:
+        target_domains = target_domain.split(",")
+    else:
+        target_domains = [target_domain]
 
     Logger.info("Starting...")
-    
+
     start_time = time.time()
+    
+    for j, target_domain in enumerate(target_domains):
+        
+        with Status(
+            f"Running modules... (0/{len(modules)}, found {database.count}, job {j + 1}/{len(target_domains)})", console=Logger.console, spinner="moon"
+        ) as status:
 
-    with Status(
-        f"Running modules... (0/{len(modules)}, found {database.count})", console=Logger.console, spinner="moon"
-    ) as status:
-
-        for i, module in enumerate(module(target_domain) for module in modules):
-            status.update(f"Running modules... ({i}/{len(modules)}, found {database.count})", spinner="moon")
-            Logger.debug(f"Running module: {module.__class__.__name__}")
-            try:
-                module.run()
-            except Exception as exc:
-                Logger.warning(f"Error running module: {module.__class__.__name__}: {exc}")
+            for i, module in enumerate(module(target_domain) for module in modules):
+                status.update(f"Running modules... ({i}/{len(modules)}, found {database.count}), job {j + 1}/{len(target_domains)}", spinner="moon")
+                Logger.debug(f"Running module: {module.__class__.__name__}")
+                try:
+                    module.run()
+                except Exception as exc:
+                    Logger.warning(f"Error running module: {module.__class__.__name__}: {exc}")
 
     results = database.get_subdomains()
 
