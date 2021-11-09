@@ -8,7 +8,6 @@ from lib import database
 class Anubis(Module):
     """ Search subdomains in Anubis DB. """
 
-    
     def run(self):
         response = requests.get(f"https://jonlu.ca/anubis/subdomains/{self.target}")
         

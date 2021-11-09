@@ -8,7 +8,6 @@ from lib import database
 class ThreatCrowd(Module):
     """ Search subdomains on ThreatCrowd. """
 
-
     def run(self):
         response = requests.get("https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=%s" % self.target)
 

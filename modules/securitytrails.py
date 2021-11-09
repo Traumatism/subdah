@@ -9,7 +9,6 @@ from lib import database
 class SecurityTrails(Module):
     """ Search subdomains on SecurityTrails. """
 
-
     def run(self):
         response = requests.get(
             "https://securitytrails.com/list/keyword/%s" % self.target,

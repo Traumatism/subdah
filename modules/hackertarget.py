@@ -10,7 +10,6 @@ from lib.config import BASE_REGEX
 class Hackertarget(Module):
     """ Search subdomains Hackertarget. """
 
-
     def run(self):
         response = requests.get("https://api.hackertarget.com/hostsearch?q=%s" % self.target)
 

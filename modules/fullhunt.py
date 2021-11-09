@@ -9,7 +9,6 @@ from lib import database
 class FullHunt(Module):
     """ Search subdomains on FullHunt. """
 
-
     def run(self):
         response = requests.get("https://fullhunt.io/api/v1/domain/%s/subdomains" % self.target)
 

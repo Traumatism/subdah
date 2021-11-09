@@ -7,7 +7,6 @@ class Logger:
 
     console = Console(log_time_format="<%X>")
 
-
     @classmethod
     def display_dict(cls, dictionnary: dict):
         """ Display a dictionnary as fancy as possible. """
@@ -17,30 +16,25 @@ class Logger:
             for key, value in dictionnary.items()
         )[:-1])
 
-
     @classmethod
     def info(cls, message):
         """ Log info message. """
         cls.console.print(message, style="bold cyan")
-
 
     @classmethod
     def warning(cls, message):
         """ Log warning message. """
         cls.console.print(message, style="bold yellow")
 
-
     @classmethod
     def error(cls, message):
         """ Log error message. """
         cls.console.print(message, style="bold red")
 
-
     @classmethod
     def success(cls, message):
         """ Log success message. """
         cls.console.print(message, style="bold green")
-
 
     @classmethod
     def debug(cls, message):

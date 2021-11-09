@@ -1,4 +1,5 @@
 import dns.resolver
+import requests
 
 from abc import ABC, abstractmethod
 
@@ -14,6 +15,7 @@ PORTS = (
     27017, # MongoDB
 )
 
+
 class Subdomain(ABC):
     """ Abstract base class for all subdomains. """
 
@@ -28,9 +30,18 @@ class Subdomain(ABC):
         super().__init__()
 
 
+    def banner(self) -> str:
+        """ Gather HTTP banner if an HTTP server is running. """
+
+
     @property
     def resolvable(self) -> bool:
-        """ Return True if the subdomain is resolvable. """
+        """ Know if the subdomain is resolvable or not.
+
+        Returns:
+            bool: True if the subdomain is resolvable, False otherwise.
+        """
+
         try:
             dns.resolver.query(self.__subdomain, 'A')
             return True
@@ -45,7 +56,12 @@ class Subdomain(ABC):
 
 
     def resolve(self) -> None | list:
-        """ Resolve the subdomain. """
+        """ Resolve the subdomain.
+
+        Returns:
+            None | list: If the subdomain is not resolvable, return None.
+        """
+        
         return None if self.resolvable is False else [x.address for x in dns.resolver.query(self.__subdomain, 'A')]
 
 
@@ -58,7 +74,11 @@ class Module(ABC):
     """ Abstract base class for all modules. """
 
     def __init__(self, target: str):
-        """ Initialize the module. """
+        """ Initialize the module.
+
+        Args:
+            target (str): Target to scan.
+        """
         self.target = target
 
 

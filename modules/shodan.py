@@ -11,7 +11,6 @@ from lib import database
 class Shodan(Module):
     """ Search subdomains on Shodan. """
 
-
     def run(self):
         response = requests.get("https://shodan.io/domain/%s" % self.target)
 

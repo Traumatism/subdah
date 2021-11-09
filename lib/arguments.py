@@ -1,6 +1,5 @@
 import argparse
 
-
 parser = argparse.ArgumentParser(
     usage="%(prog)s <arguments>",
     description="Subdah - a cool subdomains scanner."
@@ -27,6 +26,15 @@ global_flags.add_argument(
     action="store_true",
     dest="dont_resolve",
     default=False
+)
+
+global_flags.add_argument(
+    "-t", "--threads",
+    help="Max threads to use.",
+    type=int,
+    dest="threads",
+    default=5,
+    metavar="<int value>"
 )
 
 output_flags.add_argument(

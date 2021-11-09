@@ -9,7 +9,6 @@ from lib import database
 class CRTSh(Module):
     """ Search subdomains on crt.sh. """
 
-
     def add_subdomain(self, subdomain: Subdomain):
         """ Add a subdomain to the database. """
         
@@ -26,7 +25,6 @@ class CRTSh(Module):
             return
 
         database.add_subdomain(subdomain)
-
 
     def run(self):
         response = requests.get("https://crt.sh?q=%s&output=json" % self.target)

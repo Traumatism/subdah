@@ -8,7 +8,6 @@ from lib import database
 class AlienVault(Module):
     """ Search subdomains on AlienVault. """
 
-
     def add_subdomain(self, subdomain: Subdomain):
         """ Add a subdomain to the database. """
 
@@ -25,7 +24,6 @@ class AlienVault(Module):
             return
 
         database.add_subdomain(subdomain)
-
 
     def run(self):
         response = requests.get("https://otx.alienvault.com/api/v1/indicators/domain/%s/passive_dns" % self.target)

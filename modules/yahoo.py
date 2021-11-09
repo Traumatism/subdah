@@ -9,7 +9,6 @@ from lib import database
 class Yahoo(Module):
     """ Search subdomains on Yahoo. """
 
-
     def run(self):
         response = requests.get("https://search.yahoo.com/search?p=site:%s" % self.target)
         

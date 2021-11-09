@@ -4,11 +4,17 @@ import json
 
 from rich.status import Status
 
+from lib.logger import Logger
 from lib.common.abc import Module
 from lib.arguments import arguments
-from lib.logger import Logger
 
-from lib import __version__, database
+from lib.utils.threading import (
+    start_thread, wait_for_threads_to_stop
+)
+
+from lib import (
+    __version__, database
+)
 
 from modules.hackertarget import Hackertarget
 from modules.alienvault import AlienVault
@@ -52,7 +58,7 @@ if __name__ == "__main__":
     """ % __version__)
 
     target_domain = arguments.domain.lower()
-    
+
     if "," in target_domain:
         target_domains = target_domain.split(",")
     else:
@@ -61,20 +67,25 @@ if __name__ == "__main__":
     Logger.info("Starting...")
 
     start_time = time.time()
-    
+
     for j, target_domain in enumerate(target_domains):
-        
+
         with Status(
             f"Running modules... (0/{len(modules)}, found {database.count}, job {j + 1}/{len(target_domains)})", console=Logger.console, spinner="moon"
         ) as status:
-
             for i, module in enumerate(module(target_domain) for module in modules):
                 status.update(f"Running modules... ({i}/{len(modules)}, found {database.count}), job {j + 1}/{len(target_domains)}", spinner="moon")
                 Logger.debug(f"Running module: {module.__class__.__name__}")
+                
+                start_thread(module.run)
+                
+                continue
                 try:
                     module.run()
                 except Exception as exc:
                     Logger.warning(f"Error running module: {module.__class__.__name__}: {exc}")
+
+        wait_for_threads_to_stop()
 
     results = database.get_subdomains()
 
@@ -91,9 +102,9 @@ if __name__ == "__main__":
         for subdomain in results:
             if subdomain.resolvable is False:
                 continue
-            
+
             resolutions = subdomain.resolve()
-            
+
             if resolutions is None:
                 continue
 
@@ -115,7 +126,7 @@ if __name__ == "__main__":
 
     if arguments.output_file is not False:
         json_data = [{"0": "File generated using Subdah", "1": "github.com/traumatism", "2": "twitter.com/toastakerman"}]
-        
+
         for subdomain in database.get_subdomains():
 
             report = {
