@@ -9,6 +9,8 @@ global_flags = parser.add_argument_group("Global flags")
 
 output_flags = parser.add_argument_group("Output flags")
 
+http_flags = parser.add_argument_group("HTTP flags")
+
 misc_flags = parser.add_argument_group("Miscellanious flags")
 
 global_flags.add_argument(
@@ -21,10 +23,19 @@ global_flags.add_argument(
 )
 
 global_flags.add_argument(
-    "-n", "--disable-resolutions",
+    "-nR", "--disable-resolutions",
     help="Don't resolve found subdomains.",
     action="store_true",
     dest="dont_resolve",
+    default=False
+)
+
+
+global_flags.add_argument(
+    "-nH", "--disable-http-gather",
+    help="Don't gather HTTP banner.",
+    action="store_true",
+    dest="dont_gather_http",
     default=False
 )
 
@@ -45,6 +56,17 @@ output_flags.add_argument(
     default=False,
     metavar="<file path>"
 )
+
+http_flags.add_argument(
+    "--timeout",
+    help="Timeout to use. (in ms)",
+    type=int,
+    dest="http_timeout",
+    default=1500,
+    metavar="<int value>"
+)
+
+
 
 misc_flags.add_argument(
     "--debug",
