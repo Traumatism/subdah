@@ -13,7 +13,11 @@ class Hackertarget(Module):
     def run(self):
         response = requests.get("https://api.hackertarget.com/hostsearch?q=%s" % self.target)
 
-        subdomains = re.findall(r'%s,[\d\.]+\n' % BASE_REGEX % self.target, response.text)
+        subdomains = re.findall(r'(%s),([\d\.]+)+\n' % BASE_REGEX % self.target, response.text)
 
-        for subdomain in subdomains:
-            database.add_subdomain(Subdomain(subdomain))
+        for subdomain, ip_addr in subdomains:
+            subdomain = Subdomain(subdomain)
+
+            database.add_subdomain(subdomain)
+            
+            database.update_subdomain(subdomain, ip_addr)

@@ -1,9 +1,15 @@
 import dns.resolver
 import requests
 
-from abc import ABC, abstractmethod
+from typing import (
+    List, Text, Union
+)
 
-from lib.arguments import arguments
+from abc import (
+    ABC, abstractmethod
+)
+
+from ..arguments import arguments
 
 """ Disable SSL warning. """
 from requests.packages import urllib3
@@ -17,18 +23,20 @@ urllib3.disable_warnings(
 class Subdomain(ABC):
     """ Abstract base class for all subdomains. """
 
-    def __init__(self, subdomain: str) -> None:
+
+    def __init__(self, subdomain: Text) -> None:
 
         self.__subdomain = subdomain.lower()
 
         self.resolutions = []
-        
+
         self.http_banner = None
 
         super().__init__()
 
-    def gather_http_banner(self) -> None | bool | str:
-        """ Gather HTTP banner if an HTTP server is running. """
+
+    def grab_http_banner(self) -> Union[None, Text]:
+        """ Grab HTTP banner if an HTTP server is running. """
 
         if self.http_banner is not None:
             return
@@ -48,13 +56,10 @@ class Subdomain(ABC):
 
         return self.http_banner
 
+
     @property
     def resolvable(self) -> bool:
-        """ Know if the subdomain is resolvable or not.
-
-        Returns:
-            bool: True if the subdomain is resolvable, False otherwise.
-        """
+        """ Know if the subdomain is resolvable or not. """
 
         try:
             dns.resolver.query(self.__subdomain, 'A')
@@ -62,16 +67,22 @@ class Subdomain(ABC):
         except:
             return False
 
-    def resolve(self) -> None | list:
-        """ Resolve the subdomain.
 
-        Returns:
-            None | list: If the subdomain is not resolvable, return None.
-        """
-        
+    @property
+    def domain(self) -> str:
+        """ Return the domain. """
+
+        return ".".join(self.__subdomain.split('.')[-2:])
+    
+
+
+    def resolve(self) -> Union[None, List[Text]]:
+        """ Resolve the subdomain. """
+
         return None if self.resolvable is False else [x.address for x in dns.resolver.query(self.__subdomain, 'A')]
 
-    def __str__(self) -> str:
+
+    def __str__(self) -> Text:
         """ Return the subdomain. """
 
         return self.__subdomain
@@ -80,7 +91,7 @@ class Subdomain(ABC):
 class Module(ABC):
     """ Abstract base class for all modules. """
 
-    def __init__(self, target: str):
+    def __init__(self, target: Text):
         """ Initialize the module.
 
         Args:
@@ -88,6 +99,7 @@ class Module(ABC):
         """
 
         self.target = target
+
 
     @abstractmethod
     def run(self):

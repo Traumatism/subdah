@@ -1,28 +1,40 @@
+from re import sub
 import sys
 import time
 import json
+import itertools
 
-from rich.box import SIMPLE
-from rich.table import Table
+from rich.tree import Tree
+from rich.panel import Panel
 from rich.status import Status
-from rich.progress import Progress
+from rich.columns import Columns
+
+from rich.progress import (
+    BarColumn, Progress, SpinnerColumn, TextColumn,
+    TimeElapsedColumn, TimeRemainingColumn,
+    BarColumn
+)
+from lib import (
+    __version__, database, console
+)
 
 from lib.logger import Logger
+
 from lib.common.abc import Module
+
 from lib.arguments import arguments
 
 from lib.utils.threading import (
-    start_module_thread, wait_for_threads_to_stop
+    start_module_thread, 
+    wait_for_threads_to_stop
 )
 
-from lib import (
-    __version__, database
-)
 
 from modules.securitytrails import SecurityTrails
 from modules.hackertarget import Hackertarget
 from modules.threatcrowd import ThreatCrowd
 from modules.threatminer import ThreatMiner
+from modules.duckduckgo import DuckDuckGo
 from modules.alienvault import AlienVault
 from modules.fullhunt import FullHunt
 from modules.twitter import Twitter
@@ -31,12 +43,13 @@ from modules.shodan import Shodan
 from modules.google import Google
 from modules.crtsh import CRTSh
 from modules.yahoo import Yahoo
-
+from modules.qwant import Qwant
 
 modules = (
     Hackertarget, CRTSh, AlienVault, FullHunt,
     ThreatMiner, Shodan, ThreatCrowd, Yahoo,
-    Anubis, SecurityTrails, Twitter, Google
+    Anubis, SecurityTrails, Twitter, Google,
+    DuckDuckGo, Qwant
 )
 
 
@@ -46,7 +59,7 @@ if __name__ == "__main__":
         if not issubclass(module, Module):
             Logger.warning("<%s> is not a subclass of <lib.common.abc.Module> !" % module.__name__)
 
-    Logger.console.print(r"""[bold yellow]
+    console.print(r"""[bold yellow]
              _     _     _   
      ___ _ _| |_ _| |___| |_ 
     |_ -| | | . | . | .'|   |
@@ -69,126 +82,123 @@ if __name__ == "__main__":
 
     start_time = time.time()
 
-    for j, target_domain in enumerate(target_domains):
+    with Progress(
+        SpinnerColumn(finished_text="[bold green]✓[/bold green]"),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+        TimeRemainingColumn(),
+        TimeElapsedColumn(),
+        console=console,
+        transient=True
+    ) as progress:
 
-        with Status(
-            f"Running modules... (0/{len(modules)}, found {database.count}, job {j + 1}/{len(target_domains)})",
-            console=Logger.console, spinner="moon"
-        ) as status:
+        task_1 = progress.add_task(
+            "[bold magenta]Running modules       [bold yellow](waiting)[/bold yellow][/bold magenta]", 
+            total=len(modules) * len(target_domains), start=False
+        )
+            
+        task_2 = progress.add_task(
+            "[bold magenta]Resolving subdomains  [bold yellow](waiting)[/bold yellow][/bold magenta]", 
+            total=0, start=False
+        )
 
-            for i, module in enumerate(module(target_domain) for module in modules):
+        task_3 = progress.add_task(
+            "[bold magenta]Grabbing HTTP servers [bold yellow](waiting)[/bold yellow][/bold magenta]", 
+            total=0, start=False
+        )
 
-                status.update(
-                    f"Running modules... ({i}/{len(modules)}, found {database.count}), job {j + 1}/{len(target_domains)}",
-                    spinner="moon"
-                )
+        progress.start_task(task_1)
 
+        progress.update(task_1, description="[bold magenta]Running modules       [bold cyan](running)[/bold cyan][/bold magenta]")
+
+        for target_domain in target_domains:
+            for module in (module(target_domain) for module in modules):
                 start_module_thread(module)
+                progress.advance(task_1, 1)
 
         wait_for_threads_to_stop()
+        
+        progress.update(task_1, description="[bold magenta]Running modules       [bold green](done)[/bold green][/bold magenta]")
 
-    results = database.get_subdomains()
+        results = database.get_subdomains()
 
-    if not results:
-        Logger.error("No results found")
-        sys.exit(1)
+        if not results:
+            Logger.error("No results found")
+            sys.exit(1)
 
-    Logger.success(f"Found {len(results)} results!")
+        progress.update(task_2, total=len(results))
+        
+        progress.update(task_3, total=len(results))
 
-    # gotta improve this boolean logic, lol.
-    if arguments.dont_resolve is False or arguments.dont_gather_http is False:
+        progress.start_task(task_2)
 
-        with Progress() as progress:
-            resolve, probe_http = None, None
+        progress.update(task_2, description="[bold magenta]Resolving subdomains  [bold cyan](running)[/bold cyan][/bold magenta]", )
 
-            if arguments.dont_resolve is False:
-                resolve = progress.add_task(
-                    "[bold magenta]Resolving subdomains[/bold magenta]", 
-                    total=len(results), start=False
-                )
-
-            if arguments.dont_gather_http is False:
-                probe_http = progress.add_task(
-                    "[bold magenta]Gathering HTTP banners[/bold magenta]", 
-                    total=len(results), start=False
-                )
-
-            if resolve is not None:
-                progress.start_task(resolve)
-
-                for subdomain in results:
-
-                    progress.advance(resolve, 1)
-
-                    if subdomain.resolvable is False:
-                        continue
-
-                    resolutions = subdomain.resolve()
-
-                    if resolutions is None:
-                        continue
-
-                    for address in resolutions:
-                        database.update_subdomain(subdomain, address)
-
-            if probe_http is not None:
-                progress.start_task(probe_http)
-
-                for subdomain in results:
-
-                    progress.advance(probe_http, 1)
-
-                    if subdomain.resolvable is False:
-                        continue
-
-                    subdomain.gather_http_banner()
-
-        table = Table(
-            row_styles=("none", "dim"),
-            box=SIMPLE
-        )
-
-        table.add_column(
-            "#",
-            style="cyan"
-        )
-
-        table.add_column(
-            "Subdomain",
-            style="green"
-        )
-
-        table.add_column(
-            "Resolutions",
-            style="green"
-        )
-
-        table.add_column(
-            "HTTP banner",
-            style="green"
-        )
-
-        for i, subdomain in enumerate(results):
-            row = (str(i), str(subdomain),)
-
-            if arguments.dont_resolve is False:
-                resolutions = subdomain.resolve()
-                row += (", ".join(resolutions), ) if resolutions is not None else ("n/a", )
-
-            if arguments.dont_gather_http is False:
-                row += (subdomain.http_banner,)
-
-            table.add_row(*row)
-
-        Logger.console.print(table)
-
-    else:
         for subdomain in results:
-            Logger.console.print(f"[green]*[/green] [white]{subdomain}[/white]")
 
+            progress.advance(task_2, 1)
+
+            resolutions = subdomain.resolve() if subdomain.resolvable is True else None
+
+            if resolutions is None:
+                continue
+
+            for address in resolutions:
+                database.update_subdomain(subdomain, address)
+
+        progress.update(task_2, description="[bold magenta]Resolving subdomains  [bold green](done)[/bold green][/bold magenta]", )
+
+        progress.start_task(task_3)
+
+        progress.update(task_3, description="[bold magenta]Grabbing HTTP servers [bold cyan](running)[/bold cyan][/bold magenta]")
+
+        for subdomain in results:
+            progress.advance(task_3, 1)
+
+            if subdomain.resolvable is False:
+                continue
+
+            subdomain.grab_http_banner()
+            
+        progress.update(task_3, description="[bold magenta]Grabbing HTTP servers [bold green](done)[/bold green][/bold magenta]")
+
+    colors = itertools.cycle(("bold green", "dim green"))
+
+    trees = []
+
+    for domain in {subdomain.domain for subdomain in database.get_subdomains()}:
+        main_tree = Tree(f"[green bold]+[/green bold] {domain}")
+
+        for subdomain in database.get_subdomains():
+            if subdomain.domain != domain:
+                continue
+
+            tree = main_tree.add(f"[green bold]+[/green bold] {subdomain}")
+
+            if subdomain.http_banner is not None:
+                tree.add(f"[green bold]+[/green bold] {subdomain.http_banner}")
+
+            if subdomain.resolvable is False:
+                tree.add('[red bold]-[/red bold] unresolvable\n')
+
+            if subdomain.resolutions is not None and len(subdomain.resolutions) >= 1:
+                resolutions_tree = tree.add(f"[green bold]+[/green bold] resolutions ({len(subdomain.resolutions)})")
+
+                for i, ip_addr in enumerate(subdomain.resolutions):
+
+                    if i == len(subdomain.resolutions) - 1:
+                        resolutions_tree.add(f"[green bold]+[/green bold] {ip_addr}\n")
+                        continue
+    
+                    resolutions_tree.add(f"[green bold]+[/green bold] {ip_addr}")
+
+        trees.append(main_tree)
+
+    console.print(Columns(trees))
 
     if arguments.output_file is not False:
-        json_data = []
+        json_data = {domain: [] for domain in target_domains}
 
         for subdomain in database.get_subdomains():
 
@@ -196,10 +206,10 @@ if __name__ == "__main__":
                 "hostname": str(subdomain),
                 "resolvable": subdomain.resolvable,
                 "resolutions": subdomain.resolutions,
-                "http": subdomain.http_banner,
+                "http_server": subdomain.http_banner,
             }
 
-            json_data.append(report)
+            json_data[subdomain.domain].append(report)
 
         with open(arguments.output_file, "w", encoding="utf-8") as f:
             f.write(json.dumps(json_data, indent=4))

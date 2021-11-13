@@ -1,12 +1,20 @@
+"""
+Module to manage threads.
+"""
+
 import threading
 
-from lib.logger import Logger
-
+from ..logger import Logger
 from ..arguments import arguments
 
 
 def start_module_thread(module):
-    """ Start a thread with taking care of threads value. """
+    """ 
+    Start a thread for a module.
+    
+    Args:
+        module (Module): Module to start a thread for.
+    """
 
     while 1:
         if threading.active_count() <= arguments.threads:
@@ -20,5 +28,5 @@ def wait_for_threads_to_stop():
     """ Wait for all started threads to finish. """
 
     while 1:
-        if threading.active_count() == 1:
+        if threading.active_count() == 2:
             return

@@ -1,5 +1,4 @@
 import requests
-import re
 
 from lib.common.abc import Module, Subdomain
 

@@ -21,3 +21,4 @@ class Shodan(Module):
                 continue
 
             database.add_subdomain(Subdomain(f"{subdomain}.{self.target}"))
+ 

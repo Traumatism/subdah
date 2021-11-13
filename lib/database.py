@@ -1,4 +1,6 @@
-from typing import Any
+from typing import (
+    List, Dict, Text, Any
+)
 
 from .logger import Logger
 from .common.abc import Subdomain
@@ -8,7 +10,7 @@ class Database:
     """ Database class. """
 
     def __init__(self) -> None:
-        self.__subdomains: dict[str, Subdomain] = {}
+        self.__subdomains: Dict[Text, Subdomain] = {}
 
     @property
     def count(self) -> int:
@@ -20,11 +22,11 @@ class Database:
 
         return len(self.__subdomains)
 
-    def get_subdomains(self) -> list[Subdomain]:
+    def get_subdomains(self) -> List[Subdomain]:
         """ Get all subdomains in the database.
 
         Returns:
-            list[Subdomain]: List of subdomains.
+            List[Subdomain]: List of subdomains.
         """
 
         return list(self.__subdomains.values())

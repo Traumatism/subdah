@@ -1,49 +1,66 @@
-from rich.console import Console
-
 from .arguments import arguments
 
+from .config import (
+    INFO_COLOR, WARN_COLOR, SUCCESS_COLOR,
+    ERROR_COLOR, DEBUG_COLOR
+)
+
+from rich.console import Console
+
+console = Console() # console to use for printing.
+
+
 class Logger:
-    """ Logger class. """
-
-    console = Console(log_time_format="<%X>")
+    """ Logger Module. """
 
 
-    @classmethod
-    def display_dict(cls, dictionnary: dict):
-        """ Display a dictionnary as fancy as possible. """
-        cls.console.print("".join(
-            "[green]*[/green] %s%s: %s\n"
-            % (key, " " * (max(len(k) for k in dictionnary) - len(key) + 2), value)
-            for key, value in dictionnary.items()
-        )[:-1])
+    @staticmethod
+    def info(message):
+        """ Log an information message.
+
+        Args:
+            message ([type]): Message to log.
+        """
+
+        console.print(message, style=INFO_COLOR)
 
 
-    @classmethod
-    def info(cls, message):
-        """ Log info message. """
-        cls.console.print(message, style="bold cyan")
+    @staticmethod
+    def warning(message):
+        """ Log a warn message.
+
+        Args:
+            message ([type]): Message to log.
+        """
+        console.print(message, style=WARN_COLOR)
 
 
-    @classmethod
-    def warning(cls, message):
-        """ Log warning message. """
-        cls.console.print(message, style="bold yellow")
+    @staticmethod
+    def error(message):
+        """ Log an error message.
+
+        Args:
+            message ([type]): Message to log.
+        """
+        console.print(message, style=ERROR_COLOR)
 
 
-    @classmethod
-    def error(cls, message):
-        """ Log error message. """
-        cls.console.print(message, style="bold red")
+    @staticmethod
+    def success(message):
+        """ Log a success message.
+
+        Args:
+            message ([type]): Message to log.
+        """
+        console.print(message, style=SUCCESS_COLOR)
 
 
-    @classmethod
-    def success(cls, message):
-        """ Log success message. """
-        cls.console.print(message, style="bold green")
+    @staticmethod
+    def debug(message):
+        """ Log a debug message.
 
-
-    @classmethod
-    def debug(cls, message):
-        """ Log debug message. """
+        Args:
+            message ([type]): Message to log.
+        """
         if arguments.debug is True:
-            cls.console.print(message, style="bold magenta")
+            console.print(message, style=DEBUG_COLOR)

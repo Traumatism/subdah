@@ -23,23 +23,6 @@ global_flags.add_argument(
 )
 
 global_flags.add_argument(
-    "-nR", "--disable-resolutions",
-    help="Don't resolve found subdomains.",
-    action="store_true",
-    dest="dont_resolve",
-    default=False
-)
-
-
-global_flags.add_argument(
-    "-nH", "--disable-http-gather",
-    help="Don't gather HTTP banner.",
-    action="store_true",
-    dest="dont_gather_http",
-    default=False
-)
-
-global_flags.add_argument(
     "-t", "--threads",
     help="Max threads to use.",
     type=int,
