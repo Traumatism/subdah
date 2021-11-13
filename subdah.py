@@ -14,6 +14,7 @@ from rich.progress import (
     TimeElapsedColumn, TimeRemainingColumn,
     BarColumn
 )
+
 from lib import (
     __version__, database, console
 )
@@ -25,7 +26,7 @@ from lib.common.abc import Module
 from lib.arguments import arguments
 
 from lib.utils.threading import (
-    start_module_thread, 
+    start_module_thread, start_thread, 
     wait_for_threads_to_stop
 )
 
@@ -159,7 +160,7 @@ if __name__ == "__main__":
             if subdomain.resolvable is False:
                 continue
 
-            subdomain.grab_http_banner()
+            start_thread(subdomain.grab_http_banner)
             
         progress.update(task_3, description="[bold magenta]Grabbing HTTP servers [bold green](done)[/bold green][/bold magenta]")
 

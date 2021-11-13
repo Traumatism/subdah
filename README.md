@@ -5,7 +5,7 @@
 
 ### Installation
 
-⚠️ **Python 3.10 required** ⚠️
+⚠️ **Python 3.8+ required** ⚠️
 
 ```
 $ git clone https://github.com/traumatism/subdah
@@ -34,10 +34,6 @@ from lib import database
 ```python
 class MyModule(Module):
 
-    def __init__(self, target: str):
-        self.target = target
-
-
     def run(self):
         pass
 ```
@@ -47,7 +43,7 @@ def run(self):
 
     # this list should contain all the subdomains
     # gathered after running module
-    subdomains: list[Subdomain] = [
+    subdomains: List[Subdomain] = [
         Subdomain("s1.domain.com"), 
         Subdomain("s2.domain.com")
     ]
