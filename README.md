@@ -69,6 +69,6 @@ modules = (…, MyModule)
 
 ### Tested on
 
-- MacOS Monterey 12.1 (Python 3.9+ & 3.10+)
-- Windows 10 (Python 3.9+)
-
+- MacOS Monterey 12.1
+- Windows 10
+- Ubuntu 20.04
