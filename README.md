@@ -66,6 +66,29 @@ modules = (…, MyModule)
 ```
 6. And you done!
 
+### Project structure
+
+```
+.
+├── assets                # assets file for README.md
+│  └── preview.svg        # preview svg file
+├── lib                   # folder containing main libraries
+│  ├── __init__.py        # store initialised classes
+│  ├── arguments.py       # manage command line arguments
+│  ├── common             # folder containing common libraries
+│  │  └── abc.py          # abstract classes
+│  ├── config.py          # configuration
+│  ├── database.py        # database manager
+│  ├── logger.py          # logging function
+│  └── utils              # folder containing utils
+│     └── threading.py    # threading utils
+├── LICENSE               # liscence
+├── modules               # folder containing modules
+│  └── ...
+├── README.md             # GitHub readme file (📍 you are here!)
+├── requirements.txt      # Pip requirements
+└── subdah.py             # main program
+```
 
 ### Tested on
 
