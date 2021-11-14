@@ -4,9 +4,11 @@ import json
 import itertools
 
 from rich.tree import Tree
+from rich.table import Table
 from rich.panel import Panel
-from rich.status import Status
 from rich.columns import Columns
+
+from rich.box import ROUNDED
 
 from rich.progress import (
     BarColumn, Progress, SpinnerColumn, TextColumn,
@@ -80,10 +82,24 @@ if __name__ == "__main__":
     
     Logger.info("Starting...")
 
+    config_table = Table(box=ROUNDED)
+
+    config_table.add_column("Key")
+    config_table.add_column("Value")
+
+    config_table.add_row("Targets count", str(len(target_domains)))
+    config_table.add_row("Target domain%s" % "s" if len(target_domains) > 1 else "", ", ".join(target_domains))
+    config_table.add_row("Max threads count", str(arguments.threads))
+    config_table.add_row("HTTP timeout", str(arguments.http_timeout) + "milliseconds")
+    config_table.add_row("Output file", arguments.output_file if arguments.output_file is not False else "outputing disabled")
+    config_table.add_row("Modules count", str(len(modules)))
+
+    console.print(config_table)
+
     start_time = time.time()
 
     with Progress(
-        SpinnerColumn(spinner_name="aesthetic", finished_text="[bold green]✓[/bold green]"),
+            SpinnerColumn(spinner_name="simpleDotsScrolling", finished_text="[bold green]✓[/bold green]"),
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
         TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
@@ -197,7 +213,7 @@ if __name__ == "__main__":
 
         trees.append(main_tree)
 
-    console.print(Columns(trees))
+    console.print(Panel(Columns(trees)))
 
     if arguments.output_file is not False:
 
