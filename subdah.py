@@ -161,6 +161,8 @@ if __name__ == "__main__":
                 continue
 
             start_thread(subdomain.grab_http_banner)
+
+        wait_for_threads_to_stop()
             
         progress.update(task_3, description="[bold magenta]Grabbing HTTP servers [bold green](done)[/bold green][/bold magenta]")
 

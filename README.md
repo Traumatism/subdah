@@ -1,7 +1,6 @@
-# Subdah 🔎
-## another subdomains scanner.
+# Subdah
 
-![](preview.png)
+[![asciicast](https://asciinema.org/a/EsirYzqoHL1sSHTYatwHG5YAC.svg)](https://asciinema.org/a/EsirYzqoHL1sSHTYatwHG5YAC)
 
 ### Installation
 
