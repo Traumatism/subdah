@@ -30,15 +30,15 @@ class Subdomain(ABC):
 
         self.resolutions = []
 
-        self.http_banner = None
+        self.http_server = None
 
         super().__init__()
 
 
-    def grab_http_banner(self) -> Union[None, Text]:
-        """ Grab HTTP banner if an HTTP server is running. """
+    def grab_http_server(self) -> Union[None, Text]:
+        """ Grab HTTP server if an HTTP server is running. """
 
-        if self.http_banner is not None:
+        if self.http_server is not None:
             return
 
         try:
@@ -47,14 +47,14 @@ class Subdomain(ABC):
                 verify=False, timeout=arguments.http_timeout / 1000
             )
 
-            self.http_banner = response.headers['Server']
+            self.http_server = response.headers['Server']
 
         except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout, requests.exceptions.TooManyRedirects):
-            self.http_banner = "n/a"
+            self.http_server = "n/a"
         except (KeyError, ValueError):
-            self.http_banner = "HTTP server"
+            self.http_server = "HTTP server"
 
-        return self.http_banner
+        return self.server
 
 
     @property

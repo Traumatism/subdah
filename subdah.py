@@ -1,4 +1,3 @@
-from re import sub
 import sys
 import time
 import json
@@ -84,7 +83,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     with Progress(
-        SpinnerColumn(finished_text="[bold green]✓[/bold green]"),
+        SpinnerColumn(spinner_name="moon", finished_text="[bold green]✓[/bold green]"),
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
         TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
@@ -160,10 +159,10 @@ if __name__ == "__main__":
             if subdomain.resolvable is False:
                 continue
 
-            start_thread(subdomain.grab_http_banner)
+            start_thread(subdomain.grab_http_server)
 
         wait_for_threads_to_stop()
-            
+
         progress.update(task_3, description="[bold magenta]Grabbing HTTP servers [bold green](done)[/bold green][/bold magenta]")
 
     colors = itertools.cycle(("bold green", "dim green"))
@@ -179,8 +178,8 @@ if __name__ == "__main__":
 
             tree = main_tree.add(f"[green bold]+[/green bold] {subdomain}")
 
-            if subdomain.http_banner is not None:
-                tree.add(f"[green bold]+[/green bold] {subdomain.http_banner}")
+            if subdomain.http_server is not None:
+                tree.add(f"[green bold]+[/green bold] {subdomain.http_server}")
 
             if subdomain.resolvable is False:
                 tree.add('[red bold]-[/red bold] unresolvable\n')
@@ -201,6 +200,7 @@ if __name__ == "__main__":
     console.print(Columns(trees))
 
     if arguments.output_file is not False:
+
         json_data = {domain: [] for domain in target_domains}
 
         for subdomain in database.get_subdomains():
@@ -209,7 +209,7 @@ if __name__ == "__main__":
                 "hostname": str(subdomain),
                 "resolvable": subdomain.resolvable,
                 "resolutions": subdomain.resolutions,
-                "http_server": subdomain.http_banner,
+                "http_server": subdomain.http_server,
             }
 
             json_data[subdomain.domain].append(report)
