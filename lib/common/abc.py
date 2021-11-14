@@ -54,7 +54,7 @@ class Subdomain(ABC):
         except (KeyError, ValueError):
             self.http_server = "HTTP server"
 
-        return self.server
+        return self.http_server
 
 
     @property

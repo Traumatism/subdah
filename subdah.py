@@ -77,13 +77,13 @@ if __name__ == "__main__":
         target_domains = target_domain.split(",")
     else:
         target_domains = [target_domain]
-
+    
     Logger.info("Starting...")
 
     start_time = time.time()
 
     with Progress(
-        SpinnerColumn(spinner_name="moon", finished_text="[bold green]✓[/bold green]"),
+        SpinnerColumn(spinner_name="aesthetic", finished_text="[bold green]✓[/bold green]"),
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
         TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
@@ -220,3 +220,4 @@ if __name__ == "__main__":
     end_time = time.time()
 
     Logger.success(f"Finished in {round(end_time - start_time, 2)} seconds.")
+
