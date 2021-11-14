@@ -1,6 +1,6 @@
 # Subdah
 
-![Alt text](./preview.svg)
+![](assets/preview.svg)
 
 
 ### Installation
