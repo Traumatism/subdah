@@ -1,6 +1,7 @@
 # Subdah
 
-[![asciicast](https://asciinema.org/a/EsirYzqoHL1sSHTYatwHG5YAC.svg)](https://asciinema.org/a/EsirYzqoHL1sSHTYatwHG5YAC)
+![Alt text](./preview.svg)
+
 
 ### Installation
 
