@@ -7,7 +7,7 @@ from .config import (
 
 from rich.console import Console
 
-console = Console() # console to use for printing.
+console = Console(log_time_format="(%X)") # console to use for printing.
 
 
 class Logger:
@@ -22,7 +22,7 @@ class Logger:
             message ([type]): Message to log.
         """
 
-        console.print(message, style=INFO_COLOR)
+        console.log(message, style=INFO_COLOR)
 
 
     @staticmethod
@@ -32,7 +32,7 @@ class Logger:
         Args:
             message ([type]): Message to log.
         """
-        console.print(message, style=WARN_COLOR)
+        console.log(message, style=WARN_COLOR)
 
 
     @staticmethod
@@ -42,7 +42,7 @@ class Logger:
         Args:
             message ([type]): Message to log.
         """
-        console.print(message, style=ERROR_COLOR)
+        console.log(message, style=ERROR_COLOR)
 
 
     @staticmethod
@@ -52,7 +52,7 @@ class Logger:
         Args:
             message ([type]): Message to log.
         """
-        console.print(message, style=SUCCESS_COLOR)
+        console.log(message, style=SUCCESS_COLOR)
 
 
     @staticmethod
@@ -63,4 +63,4 @@ class Logger:
             message ([type]): Message to log.
         """
         if arguments.debug is True:
-            console.print(message, style=DEBUG_COLOR)
+            console.log(message, style=DEBUG_COLOR)

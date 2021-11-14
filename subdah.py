@@ -75,10 +75,7 @@ if __name__ == "__main__":
 
     target_domain = arguments.domain.lower()
 
-    if "," in target_domain:
-        target_domains = target_domain.split(",")
-    else:
-        target_domains = [target_domain]
+    target_domains = target_domain.split(",") if "," in target_domain else [target_domain]
     
     Logger.info("Starting...")
 
@@ -90,7 +87,7 @@ if __name__ == "__main__":
     config_table.add_row("Targets count", str(len(target_domains)))
     config_table.add_row("Target domain%s" % "s" if len(target_domains) > 1 else "", ", ".join(target_domains))
     config_table.add_row("Max threads count", str(arguments.threads))
-    config_table.add_row("HTTP timeout", str(arguments.http_timeout) + "milliseconds")
+    config_table.add_row("HTTP timeout", str(arguments.http_timeout) + " milliseconds")
     config_table.add_row("Output file", arguments.output_file if arguments.output_file is not False else "outputing disabled")
     config_table.add_row("Modules count", str(len(modules)))
 

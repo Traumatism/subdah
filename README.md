@@ -5,13 +5,18 @@
 
 ### Installation
 
-⚠️ **Python 3.8+ required** ⚠️
+Python >= 3.8 is required to run this program!
+
+Using it with default Windows cmd.exe isn't recommended for emojis/live display.
+I recommend to use Windows Terminal. (which is installed by default on Windows 11)
 
 ```
 $ git clone https://github.com/traumatism/subdah
 $ cd subdah
 $ pip3 install -r requirements.txt
 ```
+
+`git clone https://github.com/traumatism/subdah && cd subdah && pip3 install -r requirements.txt`
 
 ### Running
 
@@ -60,3 +65,10 @@ modules = (…, MyModule)
 
 ```
 6. And you done!
+
+
+### Tested on
+
+- MacOS Monterey 12.1 (Python 3.9+ & 3.10+)
+- Windows 10 (Python 3.9+)
+

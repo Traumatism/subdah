@@ -69,7 +69,7 @@ class Subdomain(ABC):
 
 
     @property
-    def domain(self) -> str:
+    def domain(self) -> Text:
         """ Return the domain. """
 
         return ".".join(self.__subdomain.split('.')[-2:])
