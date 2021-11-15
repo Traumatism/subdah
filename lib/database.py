@@ -1,3 +1,5 @@
+import json
+
 from typing import (
     List, Dict, Text, Any
 )
@@ -11,6 +13,12 @@ class Database:
 
     def __init__(self) -> None:
         self.__subdomains: Dict[Text, Subdomain] = {}
+
+    def export(self):
+        """ Export database to a JSON dump. """
+        json_data = {
+            ""
+        }
 
     @property
     def count(self) -> int:

@@ -1,3 +1,10 @@
+"""
+Welcome to Subdah src. !
+
+
+Maintained by @toastakerman (github.com/traumatism).
+"""
+
 import sys
 import time
 import json

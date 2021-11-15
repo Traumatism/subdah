@@ -1,5 +1,11 @@
+"""
+This module contains all abstract classes.
+
+"""
+
 import dns.resolver
 import requests
+import hashlib
 
 from typing import (
     List, Text, Union
@@ -9,20 +15,20 @@ from abc import (
     ABC, abstractmethod
 )
 
+from ..utils.cloudflare import check_cloudflare
 from ..arguments import arguments
 
 """ Disable SSL warning. """
 from requests.packages import urllib3
 from urllib3.exceptions import InsecureRequestWarning
 
-
 urllib3.disable_warnings(
     category=InsecureRequestWarning
 )
 
+
 class Subdomain(ABC):
     """ Abstract base class for all subdomains. """
-
 
     def __init__(self, subdomain: Text) -> None:
 
@@ -32,8 +38,19 @@ class Subdomain(ABC):
 
         self.http_server = None
 
+        self.http_response = None
+
         super().__init__()
 
+    @property
+    def cloudflare(self) -> bool:
+        """ Check if the subdomain is running CloudFlare. """
+        return False if self.resolvable is False else (True if check_cloudflare(self.resolutions[0]) is True else False)
+
+    @property
+    def http_content_hash(self) -> Union[None, Text]:
+        """ Get the SHA1 sum of the HTTP content. """
+        return hashlib.sha1(self.http_response.text.encode()).hexdigest() if self.http_response is not None else None
 
     def grab_http_server(self) -> Union[None, Text]:
         """ Grab HTTP server if an HTTP server is running. """
@@ -42,12 +59,12 @@ class Subdomain(ABC):
             return
 
         try:
-            response = requests.get(
+            self.http_response = requests.get(
                 f"http://{self.__subdomain}:80", 
                 verify=False, timeout=arguments.http_timeout / 1000
             )
 
-            self.http_server = response.headers['Server']
+            self.http_server = self.http_response.headers['Server']
 
         except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout, requests.exceptions.TooManyRedirects):
             self.http_server = "n/a"
@@ -55,7 +72,6 @@ class Subdomain(ABC):
             self.http_server = "HTTP server"
 
         return self.http_server
-
 
     @property
     def resolvable(self) -> bool:
@@ -67,20 +83,16 @@ class Subdomain(ABC):
         except:
             return False
 
-
     @property
     def domain(self) -> Text:
         """ Return the domain. """
 
         return ".".join(self.__subdomain.split('.')[-2:])
-    
-
 
     def resolve(self) -> Union[None, List[Text]]:
         """ Resolve the subdomain. """
 
         return None if self.resolvable is False else [x.address for x in dns.resolver.query(self.__subdomain, 'A')]
-
 
     def __str__(self) -> Text:
         """ Return the subdomain. """
@@ -99,7 +111,6 @@ class Module(ABC):
         """
 
         self.target = target
-
 
     @abstractmethod
     def run(self):
