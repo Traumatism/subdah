@@ -17,7 +17,6 @@ class Database:
     def export(self):
         """ Export database to a JSON dump. """
         json_data = {
-            ""
         }
 
     @property
@@ -72,3 +71,4 @@ class Database:
         Logger.debug(f"Updating subdomain {subdomain} in database. (IP address: {ip_address})")
 
         self.__subdomains[str(subdomain)].resolutions.append(ip_address)
+

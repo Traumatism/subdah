@@ -15,7 +15,6 @@ from abc import (
     ABC, abstractmethod
 )
 
-from ..utils.cloudflare import check_cloudflare
 from ..arguments import arguments
 
 """ Disable SSL warning. """
@@ -45,11 +44,13 @@ class Subdomain(ABC):
     @property
     def cloudflare(self) -> bool:
         """ Check if the subdomain is running CloudFlare. """
-        return False if self.resolvable is False else (True if check_cloudflare(self.resolutions[0]) is True else False)
+        
+        return self.http_server is "cloudflare"
 
     @property
     def http_content_hash(self) -> Union[None, Text]:
         """ Get the SHA1 sum of the HTTP content. """
+        
         return hashlib.sha1(self.http_response.text.encode()).hexdigest() if self.http_response is not None else None
 
     def grab_http_server(self) -> Union[None, Text]:

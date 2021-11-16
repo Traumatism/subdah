@@ -27,6 +27,8 @@ from lib import (
     __version__, database, console
 )
 
+from lib.banner import print_banner
+
 from lib.logger import Logger
 
 from lib.common.abc import Module
@@ -68,17 +70,7 @@ if __name__ == "__main__":
         if not issubclass(module, Module):
             Logger.warning("<%s> is not a subclass of <lib.common.abc.Module> !" % module.__name__)
 
-    console.print(r"""[bold yellow]
-             _     _     _   
-     ___ _ _| |_ _| |___| |_ 
-    |_ -| | | . | . | .'|   |
-    |___|___|___|___|__,|_|_| [white]([cyan]v%s[/cyan])[/white][/bold yellow]
-
-    [cyan]the third eye for subdomains 👁[/cyan]
-     
-    [green]github.com/traumatism[/green]
-
-    """ % __version__)
+    print_banner()
 
     target_domain = arguments.domain.lower()
 
@@ -230,6 +222,7 @@ if __name__ == "__main__":
                 "resolvable": subdomain.resolvable,
                 "resolutions": subdomain.resolutions,
                 "http_server": subdomain.http_server,
+                "cloudflare": subdomain.cloudflare
             }
 
             json_data[subdomain.domain].append(report)

@@ -15,18 +15,17 @@ class Logger:
 
 
     @staticmethod
-    def info(message):
+    def info(message: str):
         """ Log an information message.
 
         Args:
-            message ([type]): Message to log.
+            message (str): Message to log.
         """
 
         console.log(message, style=INFO_COLOR)
 
-
     @staticmethod
-    def warning(message):
+    def warning(message: str):
         """ Log a warn message.
 
         Args:
@@ -34,33 +33,30 @@ class Logger:
         """
         console.log(message, style=WARN_COLOR)
 
-
     @staticmethod
-    def error(message):
+    def error(message: str):
         """ Log an error message.
 
         Args:
-            message ([type]): Message to log.
+            message (str): Message to log.
         """
         console.log(message, style=ERROR_COLOR)
 
-
     @staticmethod
-    def success(message):
+    def success(message: str):
         """ Log a success message.
 
         Args:
-            message ([type]): Message to log.
+            message (str): Message to log.
         """
         console.log(message, style=SUCCESS_COLOR)
 
-
     @staticmethod
-    def debug(message):
+    def debug(message: str):
         """ Log a debug message.
 
         Args:
-            message ([type]): Message to log.
+            message (str): Message to log.
         """
         if arguments.debug is True:
             console.log(message, style=DEBUG_COLOR)
