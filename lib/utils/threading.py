@@ -30,7 +30,7 @@ def start_module_thread(module):
     """
     Logger.debug(f"Running module: {module}...")
 
-    start_thread(module.run)
+    start_thread(module._run)
 
 
 def wait_for_threads_to_stop():
@@ -39,3 +39,4 @@ def wait_for_threads_to_stop():
     while 1:
         if threading.active_count() == 2:
             return
+

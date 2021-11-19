@@ -15,6 +15,7 @@ from abc import (
     ABC, abstractmethod
 )
 
+from ..logger import console
 from ..arguments import arguments
 
 """ Disable SSL warning. """
@@ -113,7 +114,17 @@ class Module(ABC):
 
         self.target = target
 
+    def _run(self):
+        """ Run the module bis. """
+
+        try:
+            self.run()
+        except KeyboardInterrupt:
+            return
+        except:
+            console.print_exception() 
+
     @abstractmethod
     def run(self):
         """ Run the module. """
-
+ 

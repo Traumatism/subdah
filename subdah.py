@@ -23,9 +23,7 @@ from rich.progress import (
     BarColumn
 )
 
-from lib import (
-    __version__, database, console
-)
+from lib import __version__, database, console
 
 from lib.banner import print_banner
 
@@ -139,6 +137,9 @@ if __name__ == "__main__":
             Logger.error("No results found")
             sys.exit(1)
 
+
+        progress.log("Found %d subdomains" % len(results))
+
         progress.update(task_2, total=len(results))
         
         progress.update(task_3, total=len(results))
@@ -233,4 +234,3 @@ if __name__ == "__main__":
     end_time = time.time()
 
     Logger.success(f"Finished in {round(end_time - start_time, 2)} seconds.")
-

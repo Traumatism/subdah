@@ -13,7 +13,7 @@ class Shodan(Module):
 
     def run(self):
         response = requests.get("https://shodan.io/domain/%s" % self.target)
-
+        
         subdomains = set(re.findall(r'<li>(%s)<\/li>\n' % SUBDOMAIN_REGEX, response.text))
 
         for subdomain in subdomains:
