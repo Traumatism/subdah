@@ -2,6 +2,22 @@
 
 ![](assets/preview.svg)
 
+### Search subdomains on...
+
+* AlienVault
+* AnubisDB
+* Crt.sh
+* DuckDuckGo
+* FullHunt
+* Google
+* HackerTarget
+* Qwant
+* SecurityTrails
+* Shodan
+* ThreatCrowd
+* ThreatMiner
+* Twitter
+* Yahoo
 
 ### Installation
 
