@@ -16,8 +16,7 @@ class Database:
 
     def export(self):
         """ Export database to a JSON dump. """
-        json_data = {
-        }
+        json_data = {}
 
     @property
     def count(self) -> int:

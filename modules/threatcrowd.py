@@ -1,7 +1,8 @@
 import requests
+import re
 
 from lib.common.abc import Module, Subdomain
-
+from lib.config import BASE_REGEX
 from lib import database
 
 
@@ -11,12 +12,8 @@ class ThreatCrowd(Module):
     def run(self):
         response = requests.get("https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=%s" % self.target)
 
-        json_data = response.json()
+        subdomains = set(re.findall(BASE_REGEX % self.target, response.text))
 
-        if json_data["response_code"] == "0":
-            return
-
-        subdomains = response.json()["subdomains"]
 
         for subdomain in subdomains:
             database.add_subdomain(Subdomain(subdomain))

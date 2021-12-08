@@ -1,4 +1,5 @@
-from . import (console, __version__)
+""" Banner module """
+from . import console, __version__
 
 
 BANNER = r"""
@@ -12,11 +13,9 @@ BANNER = r"""
   [white bold]Subdah v%s  --  cool subdomains scanner[/white bold]
   @ [red bold]github.com/traumatism/subdah[/red bold]
 [/cyan bold]
-
 """
 
 
 def print_banner():
-    """ Print the banner to the terminal. """
+    """ Print the banner to the terminal """
     console.print(BANNER % __version__)
-
