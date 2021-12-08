@@ -24,20 +24,11 @@ from rich.progress import (
 )
 
 from lib import __version__, database, console
-
 from lib.banner import print_banner
-
 from lib.logger import Logger
-
 from lib.common.abc import Module
-
 from lib.arguments import arguments
-
-from lib.utils.threading import (
-    start_module_thread, start_thread, 
-    wait_for_threads_to_stop
-)
-
+from lib.utils.threading import start_module_thread, start_thread, wait_for_threads_to_stop
 
 from modules.securitytrails import SecurityTrails
 from modules.hackertarget import Hackertarget
@@ -60,7 +51,6 @@ modules = (
     Anubis, SecurityTrails, Twitter, Google,
     DuckDuckGo, Qwant
 )
-
 
 if __name__ == "__main__":
 
