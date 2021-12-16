@@ -46,7 +46,7 @@ class Subdomain(ABC):
     def cloudflare(self) -> bool:
         """ Check if the subdomain is running CloudFlare. """
         
-        return self.http_server is "cloudflare"
+        return self.http_server == "cloudflare"
 
     @property
     def http_content_hash(self) -> Union[None, Text]:

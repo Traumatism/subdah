@@ -13,7 +13,5 @@ class ThreatCrowd(Module):
         response = requests.get("https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=%s" % self.target)
 
         subdomains = set(re.findall(BASE_REGEX % self.target, response.text))
-
-
         for subdomain in subdomains:
             database.add_subdomain(Subdomain(subdomain))
