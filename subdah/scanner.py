@@ -4,6 +4,8 @@ from rich.console import Console
 
 from typing import Callable, Iterable, List
 
+from subdah.scanners.hackertarget import HackerTarget
+
 from .scanners.alienvault import AlienVault
 from .scanners.anubisdb import AnubisDB
 from .scanners.crtsh import CrtSh
@@ -32,6 +34,7 @@ class Scanner:
             AnubisDB,
             CrtSh,
             FullHunt,
+            HackerTarget
         ]
 
         self.subdomains: List[Subdomain] = []
