@@ -7,12 +7,15 @@ SubdomainType = Type['Subdomain']
 
 
 class Subdomain(NamedTuple):
+    """ Subdomain type """
+
     subdomain: str
 
     def __str__(self):
         return self.subdomain
 
     def as_json(self):
+        """ Return subdomain as json """
         return {
             "host": self.subdomain,
             "ip": self.ip_address(),
