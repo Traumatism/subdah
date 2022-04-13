@@ -2,7 +2,7 @@ import threadz  # using my own libraries? yeah
 
 from rich.console import Console
 
-from typing import Callable, Iterable, List, Generator
+from typing import Callable, Iterable, List
 
 from .scanners.alienvault import AlienVault
 from .scanners.anubisdb import AnubisDB
