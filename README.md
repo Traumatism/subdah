@@ -1,8 +1,16 @@
 # Subdah
 
-## a modern, embedable subdomains scanner.
+### a modern, embedable subdomains scanner.
 
-# Use
+## Usage
 
-1. Clone this repository
-2. Run `python -m subdah <domain>`
+- Clone this repository
+
+### Use as a CLI
+
+- Run `python -m subdah <domain>`
+
+# Use as a web API
+
+- Run `python -m subdah.api`
+- One endpoint: `http://localhost:8000/<domain>/subdomains`
