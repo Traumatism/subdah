@@ -18,6 +18,8 @@ __all__ = (
     "Scanner",
 )
 
+RunnerResult = Union[Iterable[Subdomain], Exception]
+
 
 class Scanner:
     """ Scanner class """
@@ -43,12 +45,10 @@ class Scanner:
 
         self.subdomains: List[Subdomain] = []
 
-    def runner(
-        self, enumerator: Enumerator
-    ) -> Callable[..., Union[Iterable[Subdomain], Exception]]:
+    def runner(self, enumerator: Enumerator) -> Callable[..., RunnerResult]:
         """ Decorator for the scan method """
 
-        def scan() -> Union[Iterable[Subdomain], Exception]:
+        def scan() -> RunnerResult:
             """ Scan target and return all the results """
 
             if self.verbose:

@@ -3,6 +3,8 @@ import rich_click
 from rich.console import Console
 from rich.table import Table
 
+from subdah.utils import json_to_rich_table
+
 from .scanner import Scanner
 
 
@@ -33,14 +35,24 @@ _)|_||_)(_|(_|| | [green]2.0.0[/]
 
     console.log("Resolving subdomains...")
 
-    table = Table(show_header=True)
+    table = Table(
+        show_header=True,
+        show_lines=True
+    )
 
     table.add_column("#", style="bright_black")
     table.add_column("Subdomain", style="cyan")
     table.add_column("IP Address", style="green")
+    table.add_column("Shodan", style="cyan")
 
     for idx, subdomain in enumerate(subdomains):
-        row = map(str, (idx, subdomain.subdomain, subdomain.ip_address() or "n/a"))
+        row = (
+            str(idx),
+            subdomain.subdomain,
+            subdomain.ip_address() or "n/a",
+            json_to_rich_table(subdomain.internetdb())
+        )
+
         table.add_row(*row)
 
     console.print(table)
