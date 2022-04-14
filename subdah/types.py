@@ -1,9 +1,9 @@
-import functools
-import socket
+from typing import Dict, NamedTuple, Optional, Type
+from subdah.utils import internetdb, resolve
 
-from typing import NamedTuple, Optional, Type
+__all__ = ("Subdomain", "SubdomainType")
 
-SubdomainType = Type['Subdomain']
+SubdomainType = Type["Subdomain"]
 
 
 class Subdomain(NamedTuple):
@@ -19,12 +19,13 @@ class Subdomain(NamedTuple):
         return {
             "host": self.subdomain,
             "ip": self.ip_address(),
+            "shodan": self.internetdb()
         }
 
-    @functools.lru_cache(maxsize=1)
     def ip_address(self) -> Optional[str]:
         """ Get the IP address of a subdomain """
-        try:
-            return socket.gethostbyname(self.subdomain)
-        except socket.gaierror:
-            return
+        return resolve(self.subdomain)
+
+    def internetdb(self) -> Dict:
+        """ Get the InternetDB data of a subdomain """
+        return internetdb(self.ip_address())

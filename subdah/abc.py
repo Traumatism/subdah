@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-
 from typing import Iterable, Type
 
 from .types import Subdomain
 
-EnumeratorType = Type['Enumerator']
+__all__ = ("Enumerator", "EnumeratorType")
+
+EnumeratorType = Type["Enumerator"]
 
 
 class Enumerator(ABC):

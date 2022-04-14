@@ -1,11 +1,10 @@
-import threadz  # using my own libraries? yeah
+import threadz
 
 from rich.console import Console
 
-from typing import Callable, Iterable, List
+from typing import Callable, Iterable, List, Union
 
-from subdah.scanners.hackertarget import HackerTarget
-
+from .scanners.hackertarget import HackerTarget
 from .scanners.alienvault import AlienVault
 from .scanners.anubisdb import AnubisDB
 from .scanners.crtsh import CrtSh
@@ -13,6 +12,11 @@ from .scanners.fullhunt import FullHunt
 
 from .types import Subdomain
 from .abc import Enumerator, EnumeratorType
+
+
+__all__ = (
+    "Scanner",
+)
 
 
 class Scanner:
@@ -39,21 +43,27 @@ class Scanner:
 
         self.subdomains: List[Subdomain] = []
 
-    def runner(self, enumerator: Enumerator) -> Callable[..., Iterable[Subdomain]]:
+    def runner(
+        self, enumerator: Enumerator
+    ) -> Callable[..., Union[Iterable[Subdomain], Exception]]:
         """ Decorator for the scan method """
 
-        def scan() -> Iterable[Subdomain]:
+        def scan() -> Union[Iterable[Subdomain], Exception]:
             """ Scan target and return all the results """
 
             if self.verbose:
                 self.console.log(f"Running {enumerator.engine}...")
 
-            return enumerator.scan(self.target)
+            try:
+                return enumerator.scan(self.target)
+            except Exception as e:
+                return e
 
         return scan
 
     def scan(self, concurrency=10) -> Iterable[Subdomain]:
         """ Scan target and return all the results """
+
         tasks = [
             (self.runner(enumerator), tuple(), {})
             for enumerator in
