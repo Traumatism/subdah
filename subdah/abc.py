@@ -15,7 +15,7 @@ class Enumerator(ABC):
 
     def __init__(self) -> None:
         if not self.engine:
-            raise ValueError("Engine name not set")
+            raise NotImplementedError("Engine name not set")
 
         super().__init__()
 

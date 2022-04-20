@@ -1,16 +1,15 @@
 import fastapi
-import functools
+import cacher
 
 from typing import Dict, List, Optional
 
-from .. import CACHE_SIZE
 from ..scanner import Scanner
 
 app = fastapi.FastAPI()
 
 
 @app.get("/{domain}/subdomains")
-@functools.lru_cache(maxsize=CACHE_SIZE)
+@cacher.lru_cache
 def _(domain: str) -> List[Dict[str, Optional[str]]]:
     """ Get the subdomains of a domain. """
     return list(
