@@ -3,13 +3,12 @@ import rich_click
 from rich.console import Console
 from rich.table import Table
 
-from subdah.utils import json_to_rich_table
-
+from .utils import json_to_rich_table
 from .scanner import Scanner
 
 
 @rich_click.command()
-@rich_click.argument("target", type=rich_click.types.STRING,)
+@rich_click.argument("target", type=rich_click.types.STRING)
 @rich_click.option("-s", "--no-shodan", is_flag=True, default=False, help="Disable using Shodan to lookup the results")
 def main(target: str, no_shodan: bool):
     console = Console()
@@ -47,9 +46,7 @@ _)|_||_)(_|(_|| | [green]2.0.0[/]
 
     for idx, subdomain in enumerate(subdomains):
         row = (
-            str(idx),
-            subdomain.subdomain,
-            subdomain.ip_address() or "n/a"
+            str(idx), subdomain.subdomain, subdomain.ip_address() or "n/a"
         )
 
         if not no_shodan:
