@@ -30,12 +30,13 @@ def json_to_rich_table(json_data: Dict) -> Table:
     table = Table(show_header=False)
 
     for key, value in json_data.items():
-        if not value:
+        if value is None:
             continue
 
-        if isinstance(value, list):
-            table.add_row(key, ", ".join(map(str, value)))
-        else:
-            table.add_row(key, value)
+        table.add_row(
+            key,
+            ", ".join(map(str, value))
+            if isinstance(value, list) else value
+        )
 
     return table

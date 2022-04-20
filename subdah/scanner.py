@@ -63,8 +63,7 @@ class Scanner:
 
         tasks = (
             (self.runner(enumerator), tuple(), {})
-            for enumerator in
-            map(lambda cls: cls(), self.enumerators)
+            for enumerator in map(lambda cls: cls(), self.enumerators)
         )
 
         for _, subdomains in threadz.gather(tasks, concurrency).items():

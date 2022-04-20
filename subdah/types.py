@@ -30,7 +30,4 @@ class Subdomain(NamedTuple):
         """ Get the InternetDB data of a subdomain """
         ip_address = self.ip_address()
 
-        if not ip_address:
-            return {}
-
-        return internetdb(ip_address)
+        return internetdb(ip_address) if ip_address else {}
