@@ -49,7 +49,7 @@ class Scanner:
             """ Scan target and return all the results """
 
             if self.verbose:
-                self.console.log(f"Running {enumerator.engine}...")
+                self.console.log(f" -> Running {enumerator.engine}...")
 
             with contextlib.suppress(Exception):
                 return enumerator.scan(self.target)

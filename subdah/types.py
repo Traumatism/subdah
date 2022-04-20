@@ -28,4 +28,9 @@ class Subdomain(NamedTuple):
 
     def internetdb(self) -> Dict:
         """ Get the InternetDB data of a subdomain """
-        return internetdb(self.ip_address())
+        ip_address = self.ip_address()
+
+        if not ip_address:
+            return {}
+
+        return internetdb(ip_address)

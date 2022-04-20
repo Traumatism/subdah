@@ -44,7 +44,8 @@ _)|_||_)(_|(_|| | [green]2.0.0[/]
     if not no_shodan:
         table.add_column("Shodan", style="cyan")
 
-    for idx, subdomain in enumerate(subdomains):
+    for idx, subdomain in enumerate(subdomains, start=1):
+
         row = (
             str(idx), subdomain.subdomain, subdomain.ip_address() or "n/a"
         )

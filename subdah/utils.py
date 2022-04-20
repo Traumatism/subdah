@@ -1,15 +1,16 @@
 import socket
+import cacher
 import requests
-import functools
 import contextlib
 
 from rich.table import Table
 from typing import Dict, Optional
 
-from . import CACHE_SIZE
+
+__all__ = ("internetdb", "resolve", "json_to_rich_table")
 
 
-@functools.lru_cache(maxsize=CACHE_SIZE)
+@cacher.lru_cache
 def internetdb(ip_address: str) -> Dict:
     """ Get the InternetDB data of a subdomain """
     return (requests.get(
@@ -17,7 +18,7 @@ def internetdb(ip_address: str) -> Dict:
     )).json()
 
 
-@functools.lru_cache(maxsize=CACHE_SIZE)
+@cacher.lru_cache
 def resolve(hostname: str) -> Optional[str]:
     """ Get the IP address of a subdomain """
     with contextlib.suppress(socket.gaierror):
