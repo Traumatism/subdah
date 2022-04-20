@@ -1,8 +1,9 @@
+import contextlib
 import threadz
 
 from rich.console import Console
 
-from typing import Callable, Iterable, List, Union
+from typing import Callable, Iterable, List
 
 from .scanners.hackertarget import HackerTarget
 from .scanners.alienvault import AlienVault
@@ -14,11 +15,7 @@ from .types import Subdomain
 from .abc import Enumerator, EnumeratorType
 
 
-__all__ = (
-    "Scanner",
-)
-
-RunnerResult = Union[Iterable[Subdomain], Exception]
+__all__ = ("Scanner",)
 
 
 class Scanner:
@@ -28,7 +25,7 @@ class Scanner:
         self,
         target: str,
         verbose: bool = False,
-        console: Console = Console(),
+        console: Console = Console()
     ) -> None:
 
         self.target = target
@@ -45,39 +42,34 @@ class Scanner:
 
         self.subdomains: List[Subdomain] = []
 
-    def runner(self, enumerator: Enumerator) -> Callable[..., RunnerResult]:
+    def runner(self, enumerator: Enumerator) -> Callable[..., Iterable[Subdomain]]:
         """ Decorator for the scan method """
 
-        def scan() -> RunnerResult:
+        def scan() -> Iterable[Subdomain]:
             """ Scan target and return all the results """
 
             if self.verbose:
                 self.console.log(f"Running {enumerator.engine}...")
 
-            try:
+            with contextlib.suppress(Exception):
                 return enumerator.scan(self.target)
-            except Exception as e:
-                return e
+
+            return tuple()
 
         return scan
 
     def scan(self, concurrency=10) -> Iterable[Subdomain]:
         """ Scan target and return all the results """
 
-        tasks = [
+        tasks = (
             (self.runner(enumerator), tuple(), {})
             for enumerator in
             map(lambda cls: cls(), self.enumerators)
-        ]
+        )
 
-        for idx, subdomains in threadz.gather(tasks, concurrency).items():
+        for _, subdomains in threadz.gather(tasks, concurrency).items():
 
-            if isinstance(subdomains, Exception):
-                exc = subdomains
-
-                if self.verbose:
-                    self.console.log(f"{self.enumerators[idx]} returned an exception: {exc}")
-
+            if subdomains is None or isinstance(subdomains, Exception):
                 continue
 
             self.subdomains.extend(subdomains)

@@ -10,7 +10,8 @@ from .scanner import Scanner
 
 @rich_click.command()
 @rich_click.argument("target", type=rich_click.types.STRING,)
-def main(target: str):
+@rich_click.option("-s", "--no-shodan", is_flag=True, default=False, help="Disable using Shodan to lookup the results")
+def main(target: str, no_shodan: bool):
     console = Console()
 
     console.print("""
@@ -35,23 +36,24 @@ _)|_||_)(_|(_|| | [green]2.0.0[/]
 
     console.log("Resolving subdomains...")
 
-    table = Table(
-        show_header=True,
-        show_lines=True
-    )
+    table = Table(show_header=True, show_lines=True)
 
     table.add_column("#", style="bright_black")
     table.add_column("Subdomain", style="cyan")
     table.add_column("IP Address", style="green")
-    table.add_column("Shodan", style="cyan")
+
+    if not no_shodan:
+        table.add_column("Shodan", style="cyan")
 
     for idx, subdomain in enumerate(subdomains):
         row = (
             str(idx),
             subdomain.subdomain,
-            subdomain.ip_address() or "n/a",
-            json_to_rich_table(subdomain.internetdb())
+            subdomain.ip_address() or "n/a"
         )
+
+        if not no_shodan:
+            row += (json_to_rich_table(subdomain.internetdb()), )
 
         table.add_row(*row)
 
