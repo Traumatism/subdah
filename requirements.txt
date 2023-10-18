@@ -20,5 +20,5 @@ starlette==0.25.0
 cacher @ git+https://github.com/traumatism/cacher@f4a382dbfb68d79ed64186b48528df2980f50800
 threadz @ git+https://github.com/traumatism/threadz@6d8322c73d3dfa30511a03a4d249e31f6591d098
 typing_extensions==4.1.1
-urllib3==1.26.9
+urllib3==1.26.18
 uvicorn==0.17.6
